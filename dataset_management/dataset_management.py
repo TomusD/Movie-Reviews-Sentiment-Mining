@@ -96,8 +96,31 @@ def get_top_n_keywords(n=100):
             json.dump(negative_counts, top_negative_file)
 
 
+def prepare_dataset_with_keyword_counts(store_as_file=True):
+    with open("basic_dataset.json", 'r') as basic_dataset_file:
+        basic_dataset = json.load(basic_dataset_file)
+
+        with open("top_positive_keywords_count.json", 'r') as top_positive_keywords_file:
+            positive_keywords = json.load(top_positive_keywords_file)
+            for keyword in positive_keywords:
+                for uid in positive_keywords[keyword]:
+                    basic_dataset[uid]["positive_keywords"] = basic_dataset[uid].get("positive_keywords", 0) + 1
+
+        with open("top_negative_keywords_count.json", 'r') as top_negative_keywords_file:
+            negative_keywords = json.load(top_negative_keywords_file)
+            for keyword in negative_keywords:
+                for uid in negative_keywords[keyword]:
+                    basic_dataset[uid]["negative_keywords"] = basic_dataset[uid].get("negative_keywords", 0) + 1
+
+        if store_as_file:
+            with open("dataset_with_keyword_counts.json", 'w') as dataset_file:
+                json.dump(basic_dataset, dataset_file)
+        return basic_dataset
+
+
 if __name__ == "__main__":
-    # _positive_keywords, _negative_keywords = prepare_keywords()
-    # _basic_dataset = prepare_basic_review_dataset(store_as_file=False)
-    # pos_count, neg_count = count_keywords(_positive_keywords, _negative_keywords, _basic_dataset, False)
+    _positive_keywords, _negative_keywords = prepare_keywords()
+    _basic_dataset = prepare_basic_review_dataset()
+    pos_count, neg_count = count_keywords(_positive_keywords, _negative_keywords, _basic_dataset)
     get_top_n_keywords()
+    prepare_dataset_with_keyword_counts()
