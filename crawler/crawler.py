@@ -35,7 +35,7 @@ def parse_page(html):
         item["review"] = item["review"].replace("\"", "")
         #print(item)
         with FileLock("lock"):
-            with open('data.json', 'a') as f:
+            with open('imdb_data.json', 'a') as f:
                 json.dump(item, f)
                 f.write('\n')
                 f.close()

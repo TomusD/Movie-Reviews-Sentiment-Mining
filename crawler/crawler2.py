@@ -35,7 +35,7 @@ def parse_page(html):
         item["review"] = item["review"].replace("\"", "")
         #print(item)
         with FileLock("lock2"):
-            with open('data2.json', 'a') as f:
+            with open('tmdb_data.json', 'a') as f:
                 json.dump(item, f)
                 f.write('\n')
                 f.close()
