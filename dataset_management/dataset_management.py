@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import json
 import uuid
@@ -26,21 +28,43 @@ def rating_to_label(rating):
 
 
 def prepare_basic_review_dataset(store_as_file=True):
-    dataset_files = ["../crawler/data.json"]  # Add here all json files that contain movie reviews and their scores
+    dataset_files = ["../crawler/imdb_data.json", "../crawler/tmdb_data.json"]  # Add here all json files that contain movie reviews and their scores
     data = {}
     for dataset_file_name in dataset_files:
-        # Will need method extraction for cleanup and implementation of other methods
-        # in case of adding data from different websites
-        # This handles iMDB data
         with open(dataset_file_name, 'r') as dataset_file:
-            for line in dataset_file:
-                entry = json.loads(line)
-                if entry["rating"] != "None":
-                    label = rating_to_label(entry["rating"])
-                    data[str(uuid.uuid4())] = {"review": entry["review"], "rating": entry["rating"], "label": label}
+            if "imdb_" in dataset_file_name:
+                data.update(prepare_imdb_reviews(dataset_file))
+            if "tmdb_" in dataset_file_name:
+                data.update(prepare_tmdb_reviews(dataset_file))
     if store_as_file:
         with open("basic_dataset.json", 'w') as basic_dataset_file:
             json.dump(data, basic_dataset_file)
+    return data
+
+
+def prepare_imdb_reviews(dataset_file):
+    data = {}
+    for line in dataset_file:
+        entry = json.loads(line)
+        if entry["rating"] != "None":
+            label = rating_to_label(entry["rating"])
+            data[str(uuid.uuid4())] = {"review": entry["review"], "rating": entry["rating"], "label": label}
+    return data
+
+
+def prepare_tmdb_reviews(dataset_file):
+    data = {}
+    for line in dataset_file:
+        entry = json.loads(line)
+        if entry["review"] != "None" and entry["rating"] != "None":
+            try:
+                rating_value = int(entry["rating"])
+                rating_value = math.ceil(rating_value/10)
+                rating_value = str(rating_value) + "/10"
+            except ValueError:
+                continue
+            label = rating_to_label(rating_value)
+            data[str(uuid.uuid4())] = {"review": entry["review"], "rating": entry["rating"], "label": label}
     return data
 
 
