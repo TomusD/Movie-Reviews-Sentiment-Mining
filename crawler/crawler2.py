@@ -42,7 +42,7 @@ def parse_page(html):
 
 # Crawler function
 def crawler2Start(baseurl):
-    html=get_html(baseurl)
+    html = get_html(baseurl)
     parse_page(html)
 
 
