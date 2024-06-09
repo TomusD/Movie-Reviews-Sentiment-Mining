@@ -39,7 +39,7 @@ def parse_page(html):
         item["rating"] = re.sub(r"%.*$", "", item["rating"])
         item["review"] = item["review"].replace("\"", "")
         #print(item)
-        with open('data.json', 'a') as f:
+        with open('data2.json', 'a') as f:
             json.dump(item, f)
             f.write('\n')
             f.close()
