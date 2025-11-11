@@ -39,3 +39,12 @@ Two main experiments were conducted with these models:
 * **Label Distribution:** The final dataset is imbalanced, with a majority of "Positive" reviews.
 * **Token Frequency:** Top tokens include "movie," "film," "character," "good," and "great."
 * **Review Length:** Most reviews are short, following a right-skewed distribution.
+
+---
+
+## Acknowledgements
+
+### Authors
+* Triantafyllou Thanasis
+* Tsiompikas Dimitris
+* Syrios Konstantinos-Zois
